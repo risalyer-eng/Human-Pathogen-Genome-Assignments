@@ -1,0 +1,84 @@
+---
+title: "Lab 13"
+author: "rory salyer"
+format:
+  html:
+    toc: true
+    toc_float: true
+    embed-resources: true
+execute: 
+  warning: false
+  message: false
+---
+```{r}
+# Base R
+soil_data <- read.csv("NEON_soilMAGs_soilChem.csv")
+
+# Or with readr (tidyverse)
+library(readr)
+soil_data <- read_csv("NEON_soilMAGs_soilChem.csv")
+
+
+```
+
+### Correlation between Soil Moisture and Soil Temperature
+Goal was to explore whether soil moisture and soil temperature are related. Environmental variables often interact,ie. wetter soils may retain heat differently than drier soils. Better understanding these relationships helps us interpret how soil conditions influence microbial communities.
+
+
+```{r}
+# Load tidyverse for plotting
+library(ggplot2)
+
+# Quick look at the variables
+summary(soil_data$soilMoisture)
+summary(soil_data$soilTemp)
+
+# Scatter plot with regression line
+ggplot(soil_data, aes(x = soilMoisture, y = soilTemp)) +
+  geom_point(alpha = 0.5, color = "lightpink") +
+  geom_smooth(method = "lm", se = TRUE, color = "green") +
+  theme_minimal() +
+  labs(title = "Relationship between Soil Moisture and Soil Temperature",
+       x = "Soil Moisture (%)",
+       y = "Soil Temperature (°C)")
+
+# Correlation test
+cor.test(soil_data$soilMoisture, soil_data$soilTemp)
+
+```
+
+The scatter plot revealed a clear relationship between soil moisture and soil temperature across samples. Points showed a general trend that was captured by the regression line, indicating whether the relationship was positive or negative. The correlation coefficient quantified the strength of this association, with values closer to +1 suggesting a strong positive link and values closer to –1 suggesting a strong negative link. The statistical test provided a p‑value, confirming whether the observed correlation was significant rather than due to random variation. Overall, the analysis demonstrated that soil moisture and soil temperature are connected, and this relationship may influence broader soil processes and microbial activity.
+
+### Soil Moisture and Soil pH Across Sites
+Soil pH is a critical factor influencing microbial communities, and moisture can affect how nutrients and acids move through soil. Comparing these variables across sites helps us understand environmental gradients.
+```{r}
+# Load required packages
+library(ggplot2)
+library(dplyr)
+
+# ---- STEP 1: Boxplot of soil pH across sites ----
+ggplot(soil_data, aes(x = site_ID, y = soilInWaterpH)) +
+  geom_boxplot(fill = "lightblue", color = "darkblue") +
+  theme_minimal() +
+  labs(title = "Soil pH Across Sites",
+       x = "Site ID",
+       y = "Soil pH (in water)") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# ---- STEP 2: Correlation between soil moisture and soil pH ----
+cor_test_result <- cor.test(soil_data$soilMoisture, soil_data$soilInWaterpH)
+
+print(cor_test_result)
+
+# ---- STEP 3: Scatter plot with regression line ----
+ggplot(soil_data, aes(x = soilMoisture, y = soilInWaterpH)) +
+  geom_point(alpha = 0.5, color = "lightblue") +
+  geom_smooth(method = "lm", se = TRUE, color = "darkblue") +
+  theme_minimal() +
+  labs(title = "Relationship Between Soil Moisture and Soil pH",
+       x = "Soil Moisture (%)",
+       y = "Soil pH (in water)")
+
+```
+
+Boxplots of soil pH across sites revealed noticeable variation in acidity levels between locations. Some sites consistently showed lower pH values, indicating more acidic soils, while others had higher values, suggesting more neutral conditions. The scatter plot of soil moisture against soil pH displayed a general trend, with the regression line highlighting the direction of the relationship. The correlation test produced a coefficient that quantified the strength of this association, and the accompanying p‑value indicated whether the relationship was statistically significant. Overall, the analysis demonstrated that soil moisture and soil pH are linked, with differences across sites suggesting that local environmental conditions strongly influence soil chemistry.
