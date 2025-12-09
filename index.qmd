@@ -1,0 +1,20 @@
+---
+title: "index"
+author: "rory salyer"
+format:
+  html:
+    toc: true
+    toc_float: true
+    embed-resources: true
+execute: 
+  warning: false
+  message: false
+---
+
+About Me:
+
+I am Rory Salyer. I am currently a senior at the University of Massachusetts Amherst, and I am awful at coding.
+
+Image:![](images/clipboard-4057444834.jpeg)
+
+Link: [Lab 7](https://ood.unity.rc.umass.edu/rnode/cpu001.unity.rc.umass.edu/4289/files/lab%207.html)
